@@ -1,30 +1,29 @@
 module Api
   module V1
     class EventsController < ApplicationController
-      #before_action: authorize_access_request!, except [:index, :show]
+      before_action :authorize_access_request!
       before_action :set_event, only: [:show, :update, :destroy]
     
+
       # GET /events
       def index
-        @events = Event.order("id DESC").all
-    
-        render json: @events
+        if params[:current_user]
+          @events = Event.where(user_id: current_user.id).order("id DESC").all
+        elsif params[:all]
+          @events = Event.order("id DESC").all
+        end
+        render json: @events,  status: :ok
       end
     
       # GET /events/1
       def show
         render json: @event
       end
-      
-      def search
-        @event = Event.search(params[:email])
-        render json:  {status: 'success', event: @event}, status: :created
-      end
 
       # POST /events
       def create
         @event = Event.new(event_params)
-    
+        @event.user_id = current_user.id
         if @event.save
           render json:  {status: 'success', event: @event}, status: :created
         else
