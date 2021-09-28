@@ -8,11 +8,11 @@ module Api
       def index
         # GET registered events for current_user
         if params[:current_user]
-          @registrations =  Event.joins(:registrations).where(Registration.arel_table[:user_id].matches(current_user.id))
+          @registrations =  Event.joins(:registrations).where("registrations.user_id::varchar ILIKE ?", "%#{current_user.id}%")
 
         # GET all registered events
         elsif params[:event_id]
-          @registrations =  Event.joins(:registrations).where("registrations.event_id LIKE ? AND registartion.user_id LIKE ?", params[:event_id], current_user.id)
+          @registrations =  Event.joins(:registrations).where("registrations.event_id::varchar ILIKE ? AND registartions.user_id::varchar ILIKE ?", "%#{params[:event_id]}%", "%#{current_user.id}%")
           if @registrations[0].id == params[:event_id]
             @registrations = {status: 'success'}
           end

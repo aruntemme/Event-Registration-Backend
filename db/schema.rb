@@ -10,26 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_28_105123) do
+ActiveRecord::Schema.define(version: 2021_09_28_175523) do
 
-  create_table "events", charset: "latin1", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "events", force: :cascade do |t|
     t.string "title"
     t.text "description"
     t.integer "duration"
     t.integer "fees"
     t.string "tags"
     t.integer "maxparticipants"
-    t.string "configurefields"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.string "createdby"
-    t.timestamp "date"
+    t.json "configurefields"
+    t.datetime "date"
     t.string "location"
     t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_events_on_user_id"
   end
 
-  create_table "notifications", charset: "utf8mb4", force: :cascade do |t|
+  create_table "notifications", force: :cascade do |t|
     t.integer "user_id"
     t.integer "event_id"
     t.integer "recipient_id"
@@ -40,7 +43,7 @@ ActiveRecord::Schema.define(version: 2021_09_28_105123) do
     t.string "event_name"
   end
 
-  create_table "registrations", charset: "latin1", force: :cascade do |t|
+  create_table "registrations", force: :cascade do |t|
     t.bigint "event_id", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -49,7 +52,7 @@ ActiveRecord::Schema.define(version: 2021_09_28_105123) do
     t.index ["user_id"], name: "index_registrations_on_user_id"
   end
 
-  create_table "users", charset: "latin1", force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "email", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -58,4 +61,5 @@ ActiveRecord::Schema.define(version: 2021_09_28_105123) do
 
   add_foreign_key "events", "users"
   add_foreign_key "registrations", "events"
+  add_foreign_key "registrations", "users"
 end

@@ -89,10 +89,10 @@ GEM
     mini_mime (1.1.1)
     minitest (5.14.4)
     msgpack (1.4.2)
-    mysql2 (0.5.3)
     nio4r (2.5.8)
     nokogiri (1.12.4-x86_64-linux)
       racc (~> 1.4)
+    pg (1.2.3)
     puma (5.5.0)
       nio4r (~> 2.0)
     racc (1.5.2)
@@ -140,7 +140,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     thor (1.1.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -158,13 +157,12 @@ DEPENDENCIES
   byebug
   jwt_sessions (~> 2.3)
   listen (~> 3.3)
-  mysql2
+  pg
   puma (~> 5.0)
   rack-cors
   rails (~> 6.1.4, >= 6.1.4.1)
   redis (~> 4.0)
   spring
-  sqlite3 (~> 1.4)
   tzinfo-data
 
 RUBY VERSION

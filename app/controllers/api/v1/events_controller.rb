@@ -25,7 +25,7 @@ module Api
         @event = Event.new(event_params)
         @event.user_id = current_user.id
         if @event.save
-          render json:  {status: 'success', event: @event}, status: :created
+          render json:  {status: 'success', event: @event, jsonOutput: params[:configurefields]}, status: :created
         else
           render json: @event.errors, status: :unprocessable_entity
         end
@@ -35,8 +35,8 @@ module Api
       def update
         if @event.update(event_params)
           
-          @registartion = Registration.where("event_id LIKE ?", params[:id])
-          @event = Event.where("id LIKE ?", params[:id])
+          @registartion = Registration.where("event_id::varchar ILIKE ?", "%#{params[:id]}%")
+          @event = Event.where("id::varchar ILIKE ?", "%#{params[:id]}%")
           for registration in @registartion do
             @notification = Notification.new()
             @notification.user_id = current_user.id
@@ -57,8 +57,9 @@ module Api
     
       # DELETE /events/1
       def destroy
-        @registartion = Registration.where("event_id LIKE ?", params[:id])
-        @events = Event.where("id LIKE ?", params[:id])
+        @registartion = Registration.where("event_id::varchar ILIKE ?", "%#{params[:id]}%")
+        @events = Event.where("id::varchar ILIKE ?", "%#{params[:id]}%")
+
         for registration in @registartion do
           @notification = Notification.new()
           @notification.user_id = current_user.id
