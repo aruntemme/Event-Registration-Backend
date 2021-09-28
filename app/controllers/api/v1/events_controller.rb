@@ -34,7 +34,22 @@ module Api
       # PATCH/PUT /events/1
       def update
         if @event.update(event_params)
-          render json: {status: 'success', event: @event}
+          
+          @registartion = Registration.where("event_id LIKE ?", params[:id])
+          @event = Event.where("id LIKE ?", params[:id])
+          for registration in @registartion do
+            @notification = Notification.new()
+            @notification.user_id = current_user.id
+            @notification.recipient_id = registration.user_id
+            @notification.action = 'updated'
+            @notification.status = 'not read'
+            @notification.event_id = params[:id]
+            @notification.event_name = @event[0].title
+
+            @notification.save
+          end
+
+          render json: {status: 'success', event: @event, notification: @notificationstatus, registartion: @registartion}
         else
           render json: @event.errors, status: :unprocessable_entity
         end
@@ -42,6 +57,19 @@ module Api
     
       # DELETE /events/1
       def destroy
+        @registartion = Registration.where("event_id LIKE ?", params[:id])
+        @events = Event.where("id LIKE ?", params[:id])
+        for registration in @registartion do
+          @notification = Notification.new()
+          @notification.user_id = current_user.id
+          @notification.recipient_id = registration.user_id
+          @notification.action = 'deleted'
+          @notification.status = 'not read'
+          @notification.event_id = params[:id]
+          @notification.event_name = @events[0].title
+          
+          @notification.save
+        end
         @event.destroy
         render json: {status: 'success'}
       end
