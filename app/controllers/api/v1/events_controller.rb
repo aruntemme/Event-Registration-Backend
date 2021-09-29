@@ -57,10 +57,10 @@ module Api
     
       # DELETE /events/1
       def destroy
-        @registartion = Registration.where("event_id::varchar ILIKE ?", "%#{params[:id]}%")
+        @registration = Registration.where("event_id::varchar ILIKE ?", "%#{params[:id]}%")
         @events = Event.where("id::varchar ILIKE ?", "%#{params[:id]}%")
 
-        for registration in @registartion do
+        for registration in @registration do
           @notification = Notification.new()
           @notification.user_id = current_user.id
           @notification.recipient_id = registration.user_id
@@ -83,7 +83,7 @@ module Api
     
         # Only allow a list of trusted parameters through.
         def event_params
-          params.require(:event).permit(:title, :description, :duration, :fees, :location, :date, :tags, :maxparticipants, :configurefields, :createdby)
+          params.require(:event).permit(:title, :description, :fees, :location, :date, :tags, :maxparticipants, :configurefields, :createdby)
         end
     end
   end

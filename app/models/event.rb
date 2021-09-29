@@ -2,7 +2,7 @@ class Event < ApplicationRecord
   belongs_to :user
   has_many :registrations, dependent: :destroy
   has_many :notifications
-  validates :title, :description, :duration, :fees, :tags, :date, :location, :maxparticipants, :createdby, presence: true
+  validates :title, :description, :fees, :tags, :date, :location, :maxparticipants, :createdby, presence: true
   
   validate :json_field_format
 

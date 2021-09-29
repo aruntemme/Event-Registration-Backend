@@ -8,14 +8,11 @@ module Api
       def index
         # GET registered events for current_user
         if params[:current_user]
-          @registrations =  Event.joins(:registrations).where("registrations.user_id::varchar ILIKE ?", "%#{current_user.id}%")
+          @registrations =  Event.joins(:registrations).where("registrations.user_id::varchar ILIKE ?", "%#{current_user.id}%").order("registrations.created_at DESC")
 
         # GET all registered events
         elsif params[:event_id]
-          @registrations =  Event.joins(:registrations).where("registrations.event_id::varchar ILIKE ? AND registartions.user_id::varchar ILIKE ?", "%#{params[:event_id]}%", "%#{current_user.id}%")
-          if @registrations[0].id == params[:event_id]
-            @registrations = {status: 'success'}
-          end
+          @registrations =  Event.joins(:registrations).where("registrations.user_id::varchar ILIKE ? AND registrations.event_id::varchar ILIKE ?", "%#{current_user.id}%", "%#{params[:event_id]}%")
         else
           @registrations = Event.joins(:registrations).all
         end
@@ -55,7 +52,7 @@ module Api
 
         # Only allow a list of trusted parameters through.
         def registration_params
-          params.require(:registration).permit(:event_id)
+          params.require(:registration).permit(:event_id, :formdata)
         end
     end
 end
