@@ -4,18 +4,18 @@ module Api
       before_action :authorize_access_request!
       before_action :set_notification, only: [:show, :update, :destroy]
 
-      # GET /notifications
+      # GET /api/v1/notifications
       def index
         @notifications = Notification.select('notifications.action, notifications.status, notifications.id, notifications.event_name, notifications.event_id').where('notifications.recipient_id = ?', current_user.id).order('notifications.id DESC')
         render json: @notifications
       end
 
-      # GET /notifications/1
+      # GET /api/v1/notifications/1
       def show
         render json: @notification
       end
 
-      # POST /notifications
+      # POST /api/v1/notifications
       def create
         @notification = Notification.new(notification_params)
 
@@ -26,7 +26,7 @@ module Api
         end
       end
 
-      # PATCH/PUT /notifications/1
+      # PATCH/PUT /api/v1/notifications/1
       def update
         if @notification.update(notification_params)
           render json: @notification
@@ -35,7 +35,7 @@ module Api
         end
       end
 
-      # DELETE /notifications/1
+      # DELETE /api/v1/notifications/1
       def destroy
         @notification.destroy
       end

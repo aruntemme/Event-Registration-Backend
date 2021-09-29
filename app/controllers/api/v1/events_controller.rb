@@ -5,7 +5,7 @@ module Api
       before_action :set_event, only: [:show, :update, :destroy]
     
 
-      # GET /events
+      # GET /api/v1/events
       def index
         if params[:current_user]
           @events = Event.where(user_id: current_user.id).order("id DESC").all
@@ -15,12 +15,12 @@ module Api
         render json: @events,  status: :ok
       end
     
-      # GET /events/1
+      # GET /api/v1/events/1
       def show
         render json: @event
       end
 
-      # POST /events
+      # POST /api/v1/events
       def create
         @event = Event.new(event_params)
         @event.user_id = current_user.id
@@ -31,7 +31,7 @@ module Api
         end
       end
     
-      # PATCH/PUT /events/1
+      # PATCH/PUT /api/v1/events/1
       def update
         if @event.update(event_params)
           
@@ -55,7 +55,7 @@ module Api
         end
       end
     
-      # DELETE /events/1
+      # DELETE /api/v1/events/1
       def destroy
         @registration = Registration.where("event_id::varchar ILIKE ?", "%#{params[:id]}%")
         @events = Event.where("id::varchar ILIKE ?", "%#{params[:id]}%")

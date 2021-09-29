@@ -1,6 +1,6 @@
 class SignupController < ApplicationController
   def create
-
+    #!check if user already exists?
     if User.exists?(:email => params[:email])
         render json: {error: "A user with this email already exists"}, status: :unprocessable_entity
     else 
