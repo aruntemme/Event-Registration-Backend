@@ -17,7 +17,11 @@ module Api
     
       # GET /api/v1/events/1
       def show
-        render json: @event
+        if @event.video.attached?
+          render json: {status: 'success', event: @event, video_url: @event.video.url}
+        else
+          render json: @event
+        end
       end
 
       # POST /api/v1/events
@@ -83,7 +87,7 @@ module Api
     
         # Only allow a list of trusted parameters through.
         def event_params
-          params.require(:event).permit(:title, :description, :fees, :location, :date, :tags, :maxparticipants, :configurefields, :createdby)
+          params.require(:event).permit(:title, :description, :fees, :location, :date, :tags, :maxparticipants, :configurefields, :createdby, :video)
         end
     end
   end

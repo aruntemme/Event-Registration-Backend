@@ -18,6 +18,7 @@ gem 'puma', '~> 5.0'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 gem 'rails_same_site_cookie', '~> 0.1.9'
+gem "aws-sdk-s3", require: false
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
