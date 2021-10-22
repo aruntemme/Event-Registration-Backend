@@ -46,6 +46,9 @@ class RecordsController < ActionController::API
         access_key_id:       Rails.application.credentials.dig(:aws, :access_key_id),
         secret_access_key:    Rails.application.credentials.dig(:aws, :secret_access_key)
       )
+
+      # to get list of all parts uploaded
+      # it is needed to complete the upload
       partsResponse = client.list_parts({
         bucket: params[:bucket], 
         key: params[:key], 
@@ -53,13 +56,10 @@ class RecordsController < ActionController::API
       })
       partsResponse_hash = partsResponse.to_h
       parts = partsResponse_hash[:parts]
-
+      
+      # removing these fields from the parts hash
       parts.each { |h| h.delete(:last_modified) }
       parts.each { |h| h.delete(:size) }
-
-      Rails.logger.info("----------------------------")
-      Rails.logger.info(parts)
-      Rails.logger.info("----------------------------")
 
       response = client.complete_multipart_upload({
         bucket: params[:bucket], 
@@ -69,6 +69,8 @@ class RecordsController < ActionController::API
           parts: parts
         }
       })
+      
+      # response.location has uploaded S3 URL
       render json: {location: response.location}  
     end
 

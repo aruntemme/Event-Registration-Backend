@@ -16,5 +16,6 @@ Rails.application.routes.draw do
   post "record/start_upload", controller: :records, action: :start_upload
   post "record/get_presigned_url", controller: :records, action: :get_presigned_url
   post "record/complete_upload", controller: :records, action: :complete_upload
+  post '/webhooks', to: proc { [204, {}, []] } 
 
 end
